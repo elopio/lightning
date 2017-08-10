@@ -1,0 +1,37 @@
+name: lightning
+version: master
+summary: a Lightning Network implementation in C
+description: |
+  c-lightning is a standard compliant implementation of the Lightning Network
+  protocol. The Lightning Network is a scalability solution for Bitcoin,
+  enabling secure and instant transfer of funds between any two party for any
+  amount.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: strict
+
+apps:
+  cli:
+    command: daemon/lightning-cli
+    plugs: [network]
+    aliases: [lightning-cli]
+  daemon:
+    command: daemon/lightningd
+    plugs: [network, network-bind]
+    aliases: [lightningd]
+
+parts:
+  lightning:
+    source: .
+    plugin: make
+    build-packages:
+      - autoconf
+      - libtool
+      - libprotobuf-c-dev
+      - libgmp-dev
+      - libsqlite3-dev
+      - python
+      - python3
+    artifacts:
+      - daemon/lightning-cli
+      - daemon/lightningd
